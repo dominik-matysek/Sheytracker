@@ -12,25 +12,25 @@ function Members({ project, reloadData }) {
 
   const dispatch = useDispatch();
   const isOwner = project.owner._id === user._id;
-  const deleteMember = async (memberId) => {
-    try {
-      dispatch(SetLoading(true));
-      const response = await RemoveMemberFromProject({
-        projectId: project._id,
-        memberId,
-      });
-      if (response.success) {
-        reloadData();
-        message.success(response.message);
-      } else {
-        throw new Error(response.message);
-      }
-      dispatch(SetLoading(false));
-    } catch (error) {
-      dispatch(SetLoading(false));
-      message.error(error.message);
-    }
-  };
+  // const deleteMember = async (memberId) => {
+  //   try {
+  //     dispatch(SetLoading(true));
+  //     const response = await RemoveMemberFromProject({
+  //       projectId: project._id,
+  //       memberId,
+  //     });
+  //     if (response.success) {
+  //       reloadData();
+  //       message.success(response.message);
+  //     } else {
+  //       throw new Error(response.message);
+  //     }
+  //     dispatch(SetLoading(false));
+  //   } catch (error) {
+  //     dispatch(SetLoading(false));
+  //     message.error(error.message);
+  //   }
+  // };
 
   const columns = [
     {
@@ -56,11 +56,11 @@ function Members({ project, reloadData }) {
     {
       title: "Action",
       dataIndex: "action",
-      render: (text, record) => (
-        <Button type="link" danger onClick={() => deleteMember(record._id)}>
-          Remove
-        </Button>
-      ),
+      // render: (text, record) => (
+      //   <Button type="link" danger onClick={() => deleteMember(record._id)}>
+      //     Remove
+      //   </Button>
+      // ),
     },
   ];
 
