@@ -56,11 +56,11 @@ function Members({ project, reloadData }) {
     {
       title: "Action",
       dataIndex: "action",
-      // render: (text, record) => (
-      //   <Button type="link" danger onClick={() => deleteMember(record._id)}>
-      //     Remove
-      //   </Button>
-      // ),
+      render: (text, record) => (
+        <Button type="link" danger>
+          Remove
+        </Button>
+      ),
     },
   ];
 
