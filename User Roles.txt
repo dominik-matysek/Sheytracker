@@ -1,0 +1,7 @@
+User Roles
+-----------
+Owner -1 => Creating Projects, Admins, All
+Admin - Many => Create Employees, Assign Tasks
+Employee - Many => Task Submission, Questions
+
+PS. Everything done in the first 8 Sections can be considered a basic setup for every web app - so things like folders, users registration and login, basic pages, etc
