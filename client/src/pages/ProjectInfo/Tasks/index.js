@@ -9,6 +9,11 @@ import { DeleteTask, GetAllTasks, UpdateTask } from "../../../apicalls/tasks";
 import { AddNotification } from "../../../apicalls/notifications";
 
 function Tasks({ project }) {
+	const [filters, setFilters] = useState({
+		status: "all",
+		assignedTo: "all",
+		assignedBy: "all",
+	});
 	const [tasks, setTasks] = useState([]);
 	const { user } = useSelector((state) => state.users);
 	const [showViewTask, setShowViewTask] = useState(false);
@@ -66,8 +71,8 @@ function Tasks({ project }) {
 				// To będziesz musiał jakoś przerobić/rozwinąć/dodać do innych funkcji w których też będziesz chciał mieć powiadomienia
 				AddNotification({
 					title: "Task Status Updated",
-					description: `${task.name} status has been updated to ${status}`,
-					user: task.assignedBy._id,
+					description: `${task.name.toUpperCase()} task status has been updated to '${status}'`,
+					user: task.assignedBy._id, //to będzie troche do zmiany, tak żeby zawsze owner projektu dostawał powiadomienie, a admin i użytkownik tylko jeśli to oni przypisali zadanie komuś
 					onClick: `/project/${project._id}`,
 				});
 			} else {
@@ -186,6 +191,71 @@ function Tasks({ project }) {
 					</Button>
 				</div>
 			)}
+
+			<div className="flex gap-5">
+				<div>
+					<span>Status</span>
+					<select
+						value={filters.status}
+						onChange={(e) => {
+							setFilters({
+								...filters,
+								status: e.target.value,
+							});
+						}}
+					>
+						<option value="all">All</option>
+						<option value="pending">Pending</option>
+						<option value="inprogress">In Progress</option>
+						<option value="completed">Completed</option>
+					</select>
+				</div>
+
+				<div>
+					<span>Assigned By</span>
+					<select
+						value={filters.assignedBy}
+						onChange={(e) => {
+							setFilters({
+								...filters,
+								assignedBy: e.target.value,
+							});
+						}}
+					>
+						<option value="all">All</option>
+						{project.members
+							.filter((m) => m.role === "admin" || m.role === "owner")
+							.map((m) => (
+								<option value={m.user._id}>
+									{m.user.firstName + " " + m.user.lastName}
+								</option>
+							))}
+					</select>
+				</div>
+
+				<div>
+					<span>Assigned To</span>
+					<select
+						value={filters.assignedTo}
+						onChange={(e) => {
+							setFilters({
+								...filters,
+								assignedTo: e.target.value,
+							});
+						}}
+					>
+						<option value="all">All</option>
+						{project.members
+							.filter((m) => m.role === "employee")
+							.map((m) => (
+								<option value={m.user._id}>
+									{m.user.firstName + " " + m.user.lastName}
+								</option>
+							))}
+					</select>
+				</div>
+			</div>
+
 			<Table columns={columns} dataSource={tasks} className="mt-5" />
 			{showTaskForm && (
 				<TaskForm

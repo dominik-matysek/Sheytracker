@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SetLoading } from "../../../redux/loadersSlice";
 import { CreateTask, UpdateTask } from "../../../apicalls/tasks";
+import { AddNotification } from "../../../apicalls/notifications";
 
 function TaskForm({
 	showTaskForm,
@@ -16,12 +17,17 @@ function TaskForm({
 	const { user } = useSelector((state) => state.users);
 	const formRef = useRef(null);
 	const dispatch = useDispatch();
+
 	const onFinish = async (values) => {
 		try {
 			let response = null;
+			const assignedToMember = project.members.find(
+				(member) => member.user.email === email
+			);
+			const assignedToUserId = assignedToMember.user._id;
 			dispatch(SetLoading(true));
 			if (task) {
-				//update task
+				// update task
 				response = await UpdateTask({
 					...values,
 					project: project._id,
@@ -29,11 +35,6 @@ function TaskForm({
 					_id: task._id,
 				});
 			} else {
-				const assignedToMember = project.members.find(
-					(member) => member.user.email === email
-				);
-				const assignedToUserId = assignedToMember.user._id;
-
 				const assignedBy = user._id;
 				response = await CreateTask({
 					...values,
@@ -42,7 +43,18 @@ function TaskForm({
 					assignedBy,
 				});
 			}
+
 			if (response.success) {
+				if (!task) {
+					// send notification to the assigned employee
+					AddNotification({
+						title: `You have been assigned a new task in ${project.name}`,
+						user: assignedToUserId,
+						onClick: `/project/${project._id}`,
+						description: values.description,
+					});
+				}
+
 				reloadData();
 				message.success(response.message);
 				setShowTaskForm(false);

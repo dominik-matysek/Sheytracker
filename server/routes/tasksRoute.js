@@ -29,7 +29,8 @@ router.post("/get-all-tasks", authMiddleware, async (req, res) => {
 		const tasks = await Task.find(req.body.filters)
 			.populate("assignedTo")
 			.populate("assignedBy")
-			.populate("project");
+			.populate("project")
+			.sort({ createdAt: -1 });
 		res.send({
 			success: true,
 			message: "Tasks fetched successfully",

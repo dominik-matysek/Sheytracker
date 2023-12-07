@@ -6,6 +6,7 @@ export const AddNotification = async (notification) =>
 export const GetAllNotifications = async () =>
 	apiRequest("get", "/api/notifications/get-all-notifications");
 
+// id chyba nie potrzebne niżej
 export const MarkNotificationAsRead = async (id) =>
 	apiRequest("post", "/api/notifications/mark-as-read");
 

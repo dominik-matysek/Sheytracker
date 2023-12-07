@@ -41,6 +41,19 @@ function ProjectInfo() {
 		getData();
 	}, []);
 
+	const items = [
+		{
+			key: "1",
+			label: "Tasks",
+			children: <Tasks project={project} />,
+		},
+		{
+			key: "2",
+			label: "Members",
+			children: <Members project={project} reloadData={getData} />,
+		},
+	];
+
 	return (
 		project && (
 			<div>
@@ -81,14 +94,17 @@ function ProjectInfo() {
 
 				<Divider />
 
-				<Tabs defaultActiveKey="1">
+				{/* <Tabs defaultActiveKey="1">
 					<Tabs.TabPane tab="Tasks" key="1">
 						<Tasks project={project} />
 					</Tabs.TabPane>
 					<Tabs.TabPane tab="Members" key="2">
 						<Members project={project} reloadData={getData} />
 					</Tabs.TabPane>
-				</Tabs>
+				</Tabs> */}
+
+				{/* Poniżej jak to powinno wyglądać (bo tabs.tabpane jest przestarzały) */}
+				<Tabs defaultActiveKey="1" items={items} />
 			</div>
 		)
 	);
