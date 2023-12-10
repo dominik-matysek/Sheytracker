@@ -28,7 +28,7 @@ function Tasks({ project }) {
 	const getTasks = async () => {
 		try {
 			dispatch(SetLoading(true));
-			const response = await GetAllTasks({ project: project._id });
+			const response = await GetAllTasks({ project: project._id, ...filters });
 			dispatch(SetLoading(false));
 			if (response.success) {
 				setTasks(response.data);
@@ -182,6 +182,10 @@ function Tasks({ project }) {
 		columns.pop();
 	}
 
+	useEffect(() => {
+		getTasks();
+	}, [filters])
+
 	return (
 		<div>
 			{!isEmployee && (
@@ -285,7 +289,7 @@ function Tasks({ project }) {
 						</span>
 
 						<div className="flex gap-5">
-							{/* {task.attachments.map((image) => {
+							{task.attachments.map((image) => {
 								return (
 									<img
 										src={image}
@@ -293,7 +297,7 @@ function Tasks({ project }) {
 										className="w-40 h-40 object-cover mt-2 p-2 border border-solid rounded border-gray-500"
 									/>
 								);
-							})} */}
+							})}
 						</div>
 					</div>
 				</Modal>
