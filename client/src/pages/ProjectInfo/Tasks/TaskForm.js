@@ -18,7 +18,7 @@ function TaskForm({
 	const { user } = useSelector((state) => state.users);
 	const formRef = useRef(null);
 	const [file = null, setFile] = useState(null);
-	const [images = [], setImages] = useState(task?.attachments || []);
+	const [images = [], setImages] = useState(task?.attachments || []); //if task is there, then only show it
 	const dispatch = useDispatch();
 
 	const onFinish = async (values) => {

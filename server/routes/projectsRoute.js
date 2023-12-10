@@ -24,15 +24,14 @@ router.post("/create-project", authMiddleware, async (req, res) => {
 // get all projects
 router.post("/get-all-projects", authMiddleware, async (req, res) => {
   try {
-    // const projects = await Project.find({
-    //   owner: req.body.userId,
-    // }).sort({ createdAt: -1 });
-    const filters = req.body.filters;
-    const projects = await Project.find(filters || {}).sort({createdAt: -1});
+    const projects = await Project.find({
+      owner: req.body.userId,
+    }).sort({ createdAt: -1 });
+
     res.send({
       success: true,
       data: projects,
-      message: "Project creted successfully"
+      message: "Project created successfully"
     });
   } catch (error) {
     res.send({
